@@ -1,12 +1,19 @@
-Access Token dùng để gọi API. Nó có thời gian sống ngắn (thường vài phút) và chứa quyền truy cập của người dùng. Nếu bị lộ thì rủi ro không quá lớn vì token sẽ hết hạn nhanh.
+Access Token dùng để gọi API và có thời gian sống ngắn, thường chỉ vài phút.
+Token này chứa quyền truy cập nên nếu bị lộ thì rủi ro chỉ tồn
+tại trong thời gian ngắn trước khi token hết hạn.
 
-Refresh Token không dùng để gọi API, mà chỉ để xin Access Token mới khi token cũ hết hạn. Nó có thời gian sống dài hơn nhiều (vài ngày hoặc vài tuần), nên nếu bị lộ thì kẻ xấu có thể xin token mới liên tục. Vì vậy Refresh Token nguy hiểm hơn Access Token.
+Refresh Token không dùng để gọi API mà chỉ dùng để cấp Access Token mới.
+Token này có thời gian sống dài hơn nhiều nên nếu bị lộ thì mức độ nguy
+hiểm cao hơn vì có thể tạo ra Access Token mới liên tục.
 
-Trong thực tế, Access Token ngắn hạn để đảm bảo an toàn, còn Refresh Token giúp người dùng không phải đăng nhập lại quá thường xuyên. Khi người dùng logout, đổi mật khẩu hoặc có dấu hiệu bất thường, Refresh Token cần bị vô hiệu hóa ngay.
+Access Token được thiết kế ngắn hạn để tăng bảo mật,
+còn Refresh Token giúp tránh việc đăng nhập lại thường xuyên.
+Khi đăng xuất, đổi mật khẩu hoặc phát hiện bất thường, Refresh Token cần bị vô hiệu hóa ngay.
 
-Về lưu trữ phía client:
+Access Token nên được lưu trong bộ nhớ tạm của ứng dụng,
+còn Refresh Token nên lưu trong cookie bảo mật.
+Không nên lưu Refresh Token trong localStorage vì dễ bị đánh cắp.
 
-Access Token nên giữ trong bộ nhớ (memory).
-Refresh Token nên lưu trong cookie HttpOnly và Secure.
-
-Cách này giúp giảm rủi ro XSS và CSRF. Không nên lưu Refresh Token trong localStorage vì rất dễ bị đánh cắp.
+Việc kiểm tra trạng thái token trong database cho phép thu hồi token
+ngay cả khi chữ ký JWT vẫn hợp lệ. Cơ chế này giúp giảm rủi ro khi token
+bị lộ và hỗ trợ đăng xuất cưỡng chế.
